@@ -1,22 +1,22 @@
 {
-  "name": "xtendsys-labs/php-presto-client",
+  "name": "nanernunes/php-presto-client",
   "description": "PHP PrestoDB.io Client",
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "Apache-2.0",
   "authors": [
     {
-      "name": "Xtendsys",
-      "email": "info@xtendsys.com"
+      "name": "Xtendsys (Forked and patched by nanernunes)",
+      "email": "naner@naner.com.br"
     },
     {
-      "name": "Sebastian Lagemann",
-      "email": "sebastian@iqu.com"
+      "name": "Naner Nunes",
+      "email": "naner@naner.com.br"
     }
   ],
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/Degola/PhpPrestoClient.git"
+      "url": "https://github.com/nanernunes/PhpPrestoClient.git"
     }
   ],
   "require": {
@@ -25,7 +25,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Xtendsys\\": "src/"
+      "Presto\\": "src/"
     }
   }
 

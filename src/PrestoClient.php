@@ -17,7 +17,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.*/
 
-namespace Xtendsys;
+namespace Presto;
 
 require_once __DIR__ . '/PrestoException.php';
 
@@ -47,6 +47,7 @@ class PrestoClient {
 
 	public $HTTP_error;
 	public $data = array();
+	public $columns = array();
 
 
 	/**
@@ -172,24 +173,32 @@ class PrestoClient {
 	private function GetVarFromResult() {
 		/* Retrieve the variables from the JSON answer */
 		
-	  	$decodedJson = json_decode($this->result); 
-	  
-	  	if (isset($decodedJson->{'nextUri'})){
-	  	$this->nextUri = $decodedJson->{'nextUri'};} else {$this->nextUri = false;}
-	  
-	  	if (isset($decodedJson->{'data'})){
-	  	$this->data = array_merge($this->data,$decodedJson->{'data'});} 
-	  
-	  	if (isset($decodedJson->{'infoUri'})){
-	  	$this->infoUri = $decodedJson->{'infoUri'};}
-	  
-	  	if (isset($decodedJson->{'partialCancelUri'})){
-	  	$this->partialCancelUri = $decodedJson->{'partialCancelUri'};}
-	  
-	  	if (isset($decodedJson->{'stats'})){
-	  		$status = $decodedJson->{'stats'};
-	  		$this->state = $status->{'state'};}
+		$decodedJson = json_decode($this->result);
+
+		if (isset($decodedJson->{'nextUri'})){
+		$this->nextUri = $decodedJson->{'nextUri'};} else {$this->nextUri = false;}
+
+		if (isset($decodedJson->{'columns'})){
+		$this->columns = array_map(function($c){ return $c->name; }, $decodedJson->{'columns'});}
+
+		if (isset($decodedJson->{'data'})){
+			$this->data = array_merge(
+				$this->data,
+				array_map(function($d) { return array_combine($this->columns, $d); }, $decodedJson->{'data'})
+			);
 		}
+
+		if (isset($decodedJson->{'infoUri'})){
+		$this->infoUri = $decodedJson->{'infoUri'};}
+
+		if (isset($decodedJson->{'partialCancelUri'})){
+		$this->partialCancelUri = $decodedJson->{'partialCancelUri'};}
+
+		if (isset($decodedJson->{'stats'})){
+			$status = $decodedJson->{'stats'};
+			$this->state = $status->{'state'};}
+	}
+
 	
 	/**
 	 * Provide a function to cancel current request if not yet finished
@@ -215,3 +224,4 @@ class PrestoClient {
 }
 
 ?>
+

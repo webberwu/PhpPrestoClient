@@ -1,6 +1,6 @@
 <?php
 
-namespace Xtendsys;
+namespace Presto;
 
 class PrestoException extends \Exception {
 
