@@ -20,7 +20,8 @@ limitations under the License.
 
 namespace Presto;
 
-require_once __DIR__ . '/PrestoException.php';
+use Presto\PrestoException;
+
 
 class PrestoClient
 {
@@ -81,7 +82,7 @@ class PrestoClient
      *
      * @param  $query
      * @return bool
-     * @throws Exception
+     * @throws PrestoException
      */
     public function query($query)
     {

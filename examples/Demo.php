@@ -14,10 +14,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.*/
 
+require_once(__DIR__ . '/../vendor/autoload.php');
+
 use Presto\PrestoClient;
 use Presto\PrestoException;
-
-require_once(__DIR__ . '/../src/PrestoClient.php');
 
 //Create a new connection object. Provide URL and catalog as parameters
 $presto = new PrestoClient('http://localhost:8080/v1/statement', 'hive');
@@ -25,14 +25,14 @@ $presto = new PrestoClient('http://localhost:8080/v1/statement', 'hive');
 //Prepare your sql request
 try {
     $presto->query('select count(*) from hive.default.my_table');
+
+    //Execute the request and build the result
+    $presto->waitQueryExec();
+
+    //Get the result
+    $answer = $presto->getData();
+
+    var_dump($answer);
 } catch (PrestoException $e) {
     var_dump($e);
 }
-
-//Execute the request and build the result
-$presto->waitQueryExec();
-
-//Get the result
-$answer = $presto->getData();
-
-var_dump($answer);
