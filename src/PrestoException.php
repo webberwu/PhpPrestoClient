@@ -1,9 +1,6 @@
 <?php
-
 namespace Presto;
 
-class PrestoException extends \Exception {
-
+class PrestoException extends \Exception
+{
 }
-
-?>
