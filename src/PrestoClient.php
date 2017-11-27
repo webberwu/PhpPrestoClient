@@ -29,7 +29,7 @@ class PrestoClient
      * The following parameters may be modified depending on your configuration
      */
     private $source = 'PhpPrestoClient';
-    private $version = '0.2';
+    private $version = '0.1.0';
     private $maximumRetries = 5;
     private $prestoUser = 'presto';
     private $prestoSchema = 'default';
@@ -41,6 +41,7 @@ class PrestoClient
     private $infoUri = '';
     private $partialCancelUri = '';
     private $state = 'NONE';
+    private $error;
 
     private $url;
     private $headers;
@@ -143,6 +144,15 @@ class PrestoClient
             $this->getVarFromResult();
         }
 
+        if ($this->state === 'FAILED') {
+            throw new PrestoException(sprintf(
+                '%s (%d): %s',
+                $this->error->errorName,
+                $this->error->errorCode,
+                $this->error->message
+            ));
+        }
+
         if ($this->state !== 'FINISHED') {
             throw new PrestoException('Incoherent State at end of query');
         }
@@ -206,6 +216,10 @@ class PrestoClient
 
         if (isset($decodedJson->{'partialCancelUri'})) {
             $this->partialCancelUri = $decodedJson->{'partialCancelUri'};
+        }
+
+        if (isset($decodedJson->error)) {
+            $this->error = $decodedJson->error;
         }
 
         if (isset($decodedJson->{'stats'})) {
