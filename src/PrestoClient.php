@@ -124,7 +124,7 @@ class PrestoClient {
         //set status to RUNNING
         curl_close($connect);
         $this->state = "RUNNING";
-        return true;	
+        return true;
     }
 
 
@@ -152,7 +152,7 @@ class PrestoClient {
 
     }
 
-    /** 
+    /**
      * Provide Information on the query execution
      * The server keeps the information for 15minutes
      * Return the raw JSON message for now
@@ -205,7 +205,7 @@ class PrestoClient {
      */
     private function Cancel(){
         if (!isset($this->partialCancelUri)){
-            return false; 
+            return false;
 
             $connect = \curl_init();
             \curl_setopt($connect,CURLOPT_URL, $this->partialCancelUri);
@@ -218,10 +218,8 @@ class PrestoClient {
             if($httpCode!="204"){
                 return false;}else{
                 return true;}
-        }	
+        }
     }
-
 }
-
 ?>
 
