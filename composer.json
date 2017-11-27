@@ -1,32 +1,25 @@
 {
-  "name": "nanernunes/php-presto-client",
-  "description": "PHP PrestoDB.io Client",
-  "minimum-stability": "stable",
-  "license": "Apache-2.0",
-  "authors": [
-    {
-      "name": "Xtendsys (Forked and patched by nanernunes)",
-      "email": "naner@naner.com.br"
+    "name": "webberwu/php-presto-client",
+    "description": "PHP PrestoDB.io Client is forked from nanernunes",
+    "minimum-stability": "stable",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Naner Nunes (Forked and patched by webber.wu)",
+            "email": "naner@naner.com.br"
+        },
+        {
+            "name": "Webber Wu",
+            "email": "chenshin0719@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "ext-curl": "*"
     },
-    {
-      "name": "Naner Nunes",
-      "email": "naner@naner.com.br"
+    "autoload": {
+        "psr-4": {
+            "Presto\\": "src/"
+        }
     }
-  ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/nanernunes/PhpPrestoClient.git"
-    }
-  ],
-  "require": {
-    "php": ">=5.3.0",
-    "ext-curl": "*"
-  },
-  "autoload": {
-    "psr-4": {
-      "Presto\\": "src/"
-    }
-  }
-
 }
