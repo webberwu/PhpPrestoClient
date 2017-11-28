@@ -149,7 +149,7 @@ class PrestoClient
                 '%s (%d): %s',
                 $this->error->errorName,
                 $this->error->errorCode,
-                $this->error->message
+                isset($this->error->message) ? $this->error->message : ''
             ));
         }
 
