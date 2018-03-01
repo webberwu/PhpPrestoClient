@@ -37,6 +37,7 @@ class PrestoClient
     private $userAgent = '';
 
     //Do not modify below this line
+    private $queryId = '';
     private $nextUri = '';
     private $infoUri = '';
     private $partialCancelUri = '';
@@ -60,8 +61,15 @@ class PrestoClient
      */
     public function __construct($connectUrl, $catalog)
     {
-        $this->url = $connectUrl;
+        $this->url = rtrim($connectUrl, '/');
         $this->prestoCatalog = $catalog;
+
+        $this->headers = [
+            'X-Presto-User: ' . $this->prestoUser,
+            'X-Presto-Catalog: ' . $this->prestoCatalog,
+            'X-Presto-Schema: ' . $this->prestoSchema,
+            'User-Agent: ' . $this->userAgent
+        ];
     }
 
     /**
@@ -97,15 +105,8 @@ class PrestoClient
             return false;
         }
 
-        $this->headers = [
-            'X-Presto-User: ' . $this->prestoUser,
-            'X-Presto-Catalog: ' . $this->prestoCatalog,
-            'X-Presto-Schema: ' . $this->prestoSchema,
-            'User-Agent: ' . $this->userAgent
-        ];
-
         $connect = \curl_init();
-        \curl_setopt($connect, CURLOPT_URL, $this->url);
+        \curl_setopt($connect, CURLOPT_URL, $this->url . '/v1/statement');
         \curl_setopt($connect, CURLOPT_HTTPHEADER, $this->headers);
         \curl_setopt($connect, CURLOPT_RETURNTRANSFER, 1);
         \curl_setopt($connect, CURLOPT_POST, 1);
@@ -189,6 +190,10 @@ class PrestoClient
             $this->nextUri = false;
         }
 
+        if (isset($decodedJson->{'id'})) {
+            $this->queryId = $decodedJson->id;
+        }
+
         if (isset($decodedJson->{'columns'})) {
             $this->columns = array_map(
                 function ($c) {
@@ -229,26 +234,25 @@ class PrestoClient
     }
 
     /**
-     * Provide a function to cancel current request if not yet finished
+     * cancel the query
+     *
+     * @param string $queryId
+     * @return bool
      */
-    private function cancel()
+    public function cancel($queryId)
     {
-        if (!isset($this->partialCancelUri)) {
+        $connect = curl_init();
+        curl_setopt($connect, CURLOPT_URL, $this->url . "/v1/query/$queryId");
+        curl_setopt($connect, CURLOPT_HTTPHEADER, $this->headers);
+        curl_setopt($connect, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        curl_exec($connect);
+        $httpCode = curl_getinfo($connect, CURLINFO_HTTP_CODE);
+        curl_close($connect);
+
+        if ($httpCode != '204') {
             return false;
-
-            $connect = \curl_init();
-            \curl_setopt($connect, CURLOPT_URL, $this->partialCancelUri);
-            \curl_setopt($connect, CURLOPT_HTTPHEADER, $this->headers);
-            $infoRequest = \curl_exec($connect);
-            \curl_close($connect);
-
-            $httpCode = \curl_getinfo($connect, CURLINFO_HTTP_CODE);
-
-            if ($httpCode != '204') {
-                return false;
-            } else {
-                return true;
-            }
         }
+
+        return true;
     }
 }

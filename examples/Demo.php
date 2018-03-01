@@ -20,7 +20,7 @@ use Presto\PrestoClient;
 use Presto\PrestoException;
 
 //Create a new connection object. Provide URL and catalog as parameters
-$presto = new PrestoClient('http://localhost:8080/v1/statement', 'hive');
+$presto = new PrestoClient('http://localhost:8080/', 'hive');
 
 //Prepare your sql request
 try {
