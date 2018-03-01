@@ -105,16 +105,16 @@ class PrestoClient
             return false;
         }
 
-        $connect = \curl_init();
-        \curl_setopt($connect, CURLOPT_URL, $this->url . '/v1/statement');
-        \curl_setopt($connect, CURLOPT_HTTPHEADER, $this->headers);
-        \curl_setopt($connect, CURLOPT_RETURNTRANSFER, 1);
-        \curl_setopt($connect, CURLOPT_POST, 1);
-        \curl_setopt($connect, CURLOPT_POSTFIELDS, $this->request);
+        $connect = curl_init();
+        curl_setopt($connect, CURLOPT_URL, $this->url . '/v1/statement');
+        curl_setopt($connect, CURLOPT_HTTPHEADER, $this->headers);
+        curl_setopt($connect, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($connect, CURLOPT_POST, 1);
+        curl_setopt($connect, CURLOPT_POSTFIELDS, $this->request);
 
-        $this->result = \curl_exec($connect);
+        $this->result = curl_exec($connect);
 
-        $httpCode = \curl_getinfo($connect, CURLINFO_HTTP_CODE);
+        $httpCode = curl_getinfo($connect, CURLINFO_HTTP_CODE);
 
         if ($httpCode != '200') {
             $this->HTTP_error = $httpCode;
@@ -170,11 +170,11 @@ class PrestoClient
      */
     public function getInfo()
     {
-        $connect = \curl_init();
-        \curl_setopt($connect, CURLOPT_URL, $this->infoUri);
-        \curl_setopt($connect, CURLOPT_HTTPHEADER, $this->headers);
-        $infoRequest = \curl_exec($connect);
-        \curl_close($connect);
+        $connect = curl_init();
+        curl_setopt($connect, CURLOPT_URL, $this->infoUri);
+        curl_setopt($connect, CURLOPT_HTTPHEADER, $this->headers);
+        $infoRequest = curl_exec($connect);
+        curl_close($connect);
 
         return $infoRequest;
     }
