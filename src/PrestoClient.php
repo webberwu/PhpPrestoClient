@@ -113,6 +113,7 @@ class PrestoClient
         curl_setopt($connect, CURLOPT_POSTFIELDS, $this->request);
 
         $this->result = curl_exec($connect);
+        $this->getVarFromResult();
 
         $httpCode = curl_getinfo($connect, CURLINFO_HTTP_CODE);
 
@@ -126,6 +127,11 @@ class PrestoClient
         $this->state = 'RUNNING';
 
         return true;
+    }
+
+    public function getQueryId()
+    {
+        return $this->queryId;
     }
 
     /**
