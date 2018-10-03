@@ -22,7 +22,6 @@ namespace Presto;
 
 use Presto\PrestoException;
 
-
 class PrestoClient
 {
     /**
