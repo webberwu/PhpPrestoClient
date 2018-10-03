@@ -104,7 +104,7 @@ class PrestoClient
 
         if ($httpCode != '200') {
             $this->httpError = $httpCode;
-            throw new PrestoException("HTTP ERRROR: {$this->httpError}");
+            throw new PrestoException("HTTP ERRROR: {$this->httpError}", $this->httpError ?: 503);
         }
 
         //set status to RUNNING
@@ -142,7 +142,7 @@ class PrestoClient
                 $this->error->errorName,
                 $this->error->errorCode,
                 isset($this->error->message) ? $this->error->message : ''
-            ));
+            ), $this->error->errorCode);
         }
 
         if ($this->state !== 'FINISHED') {
