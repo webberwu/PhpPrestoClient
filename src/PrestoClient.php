@@ -24,16 +24,6 @@ use Presto\PrestoException;
 
 class PrestoClient
 {
-    /**
-     * The following parameters may be modified depending on your configuration
-     */
-    private $source = 'PhpPrestoClient';
-    private $version = '0.1.0';
-    private $prestoUser = 'presto';
-    private $prestoSchema = 'default';
-    private $prestoCatalog = 'hive';
-    private $userAgent = '';
-
     //Do not modify below this line
     private $queryId = '';
     private $nextUri = '';
@@ -60,13 +50,11 @@ class PrestoClient
     public function __construct($connectUrl, $catalog)
     {
         $this->url = rtrim($connectUrl, '/');
-        $this->prestoCatalog = $catalog;
 
         $this->headers = [
-            'X-Presto-User: ' . $this->prestoUser,
-            'X-Presto-Catalog: ' . $this->prestoCatalog,
-            'X-Presto-Schema: ' . $this->prestoSchema,
-            'User-Agent: ' . $this->userAgent
+            'X-Presto-User: presto',
+            "X-Presto-Catalog: $catalog",
+            'X-Presto-Schema: default',
         ];
     }
 
@@ -95,7 +83,6 @@ class PrestoClient
     {
 
         $this->data = [];
-        $this->userAgent = $this->source . '/' . $this->version;
 
         $this->request = $query;
         //check that no other queries are already running for this object
