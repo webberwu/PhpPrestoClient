@@ -188,15 +188,11 @@ class PrestoClient
         // Retrieve the variables from the JSON answer
         $decodedJson = json_decode($this->result);
 
-        if (isset($decodedJson->nextUri)) {
-            $this->nextUri = $decodedJson->nextUri;
-        } else {
-            $this->nextUri = false;
-        }
-
-        if (isset($decodedJson->id)) {
-            $this->queryId = $decodedJson->id;
-        }
+        $this->nextUri = $decodedJson->nextUri ?? false;
+        $this->queryId = $decodedJson->id ?? '';
+        $this->infoUri = $decodedJson->infoUri ?? '';
+        $this->partialCancelUri = $decodedJson->partialCancelUri ?? '';
+        $this->error = $decodedJson->error ?? null;
 
         if (isset($decodedJson->columns)) {
             $this->columns = array_map(
@@ -217,18 +213,6 @@ class PrestoClient
                     $decodedJson->data
                 )
             );
-        }
-
-        if (isset($decodedJson->infoUri)) {
-            $this->infoUri = $decodedJson->infoUri;
-        }
-
-        if (isset($decodedJson->partialCancelUri)) {
-            $this->partialCancelUri = $decodedJson->partialCancelUri;
-        }
-
-        if (isset($decodedJson->error)) {
-            $this->error = $decodedJson->error;
         }
 
         if (isset($decodedJson->stats)) {
