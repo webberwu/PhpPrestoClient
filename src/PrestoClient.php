@@ -47,7 +47,7 @@ class PrestoClient
     private $result;
     private $request;
 
-    public $HTTP_error;
+    public $httpError;
     public $data = [];
     public $columns = [];
 
@@ -116,8 +116,8 @@ class PrestoClient
         $httpCode = curl_getinfo($connect, CURLINFO_HTTP_CODE);
 
         if ($httpCode != '200') {
-            $this->HTTP_error = $httpCode;
-            throw new PrestoException("HTTP ERRROR: {$this->HTTP_error}");
+            $this->httpError = $httpCode;
+            throw new PrestoException("HTTP ERRROR: {$this->httpError}");
         }
 
         //set status to RUNNING
