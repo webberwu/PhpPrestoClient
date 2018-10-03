@@ -30,7 +30,6 @@ class PrestoClient
      */
     private $source = 'PhpPrestoClient';
     private $version = '0.1.0';
-    private $maximumRetries = 5;
     private $prestoUser = 'presto';
     private $prestoSchema = 'default';
     private $prestoCatalog = 'hive';
